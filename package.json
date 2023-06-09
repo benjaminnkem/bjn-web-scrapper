@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest",
     "dev": "nodemon app.js",
-    "tail": "tailwind -i ./src/input.css -o ./dist/output.css --watch"
+    "tail": "tailwind -i ./src/input.css -o ./dist/output.css --watch",
+    "start": "node app.js"
   },
   "keywords": [],
   "author": "",
