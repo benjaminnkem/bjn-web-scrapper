@@ -111,7 +111,19 @@ app.get("/", async (req, res) => {
   // const crawlData = await myCrawler("https://www.ceelyrics.com");
   // res.json(crawlData);
 
-  res.status(200).render('home')
+  res.status(200).render("home");
+});
+
+app.get("/scrape", (req, res) => {
+  res.status(200).render("scrape");
+});
+
+app.use(function (req, res) {
+  res.status(404).render("404");
+});
+
+app.use(function (error, req, res, next) {
+  res.status(500).render("500");
 });
 
 app.listen(port, () => console.log(`app listening on port ${port}!`));
