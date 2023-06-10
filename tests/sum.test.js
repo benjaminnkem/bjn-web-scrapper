@@ -1,5 +1,5 @@
 const subtractFunction = require("../substract");
-const sumFunctions = require("../sum");
+const sumFunctions = require("../src/sum");
 
 const { sum, checkArr } = sumFunctions;
 const { subtract, getUserData } = subtractFunction;

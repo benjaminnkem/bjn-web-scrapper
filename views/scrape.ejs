@@ -7,12 +7,35 @@
     <%- include('includes/general_links') %>
     <title>Get All Urls - BjnAPI</title>
   </head>
-  <body class="bg-slate-900 text-slate-50">
-    <%- include('includes/navbar', { color: 'text-slate-50' }) %>
+  <body>
+    <%- include('includes/navbar', { color: 'text-slate-900' }) %>
     <main>
-      <div class="md:max-w-[1024px] w-11/12 mx-auto">
-        <div>
-          
+      <div class="h-[28rem] bg-blue-700 text-blue-50 flex items-center justify-center">
+        <div class="md:max-w-[1024px] w-11/12 mx-auto">
+          <div class="text-center space-y-4">
+            <div class="space-y-1">
+              <h1 class="text-4xl">Enter Domain</h1>
+              <p class="font-light">Enter domain name to crawl the website</p>
+            </div>
+            <div>
+              <input
+                type="text"
+                class="w-1/2 mx-auto rounded-md shadow-md placeholder:text-slate-800 text-slate-800 p-4 font-medium focus:outline-none"
+                placeholder="e.g https://example.com"
+              />
+              <button class="bg-blue-600 transition hover:bg-blue-500 px-10 py-2 block rounded-md mx-auto mt-2">
+                <span>Start</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-10">
+        <div class="md:max-w-[1024px] w-11/12 mx-auto">
+          <div class="text-center space-y-4">
+            <h2 class="text-2xl font-semibold">Result</h2>
+          </div>
         </div>
       </div>
     </main>
