@@ -9,9 +9,10 @@ const port = process.env.PORT || 3000;
 
 // app.use(express.json())
 app.use(express.urlencoded({ extended: false }));
+app.use("public/images/", express.static("images"));
 app.use(express.static("public"));
 app.use(express.static("dist"));
-app.use("public/images/", express.static("images"));
+app.use(express.static("node_modules/remixicon/fonts/"));
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -33,7 +34,7 @@ app.get("/scrape", async (req, res) => {
       const $ = cheerio.load(htmlBody);
       $("a").each(function () {
         const linkUrl = $(this).attr("href");
-        console.log(linkUrl);
+        // console.log(linkUrl);
       });
     } catch (error) {
       throw new Error(error.message);

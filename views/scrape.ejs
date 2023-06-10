@@ -4,7 +4,9 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <%- include('includes/general_links') %>
+    <%- include('includes/general_links') %> <%- include('includes/optional_links') %>
+    <link rel="stylesheet" href="/css/scrape.css">
+    <script src="/js/scrapy.js" defer></script>
     <title>Get All Urls - BjnAPI</title>
   </head>
   <body>
@@ -20,10 +22,15 @@
             <div>
               <input
                 type="text"
-                class="w-1/2 mx-auto rounded-md shadow-md placeholder:text-slate-800 text-slate-800 p-4 font-medium focus:outline-none"
+                class="w-1/2 mx-auto rounded-md shadow-md placeholder:text-slate-800 text-slate-800 p-4 font-medium focus:outline-red-500"
                 placeholder="e.g https://example.com"
+                id="domain-input"
               />
-              <button class="bg-blue-600 transition hover:bg-blue-500 px-10 py-2 block rounded-md mx-auto mt-2">
+              <button
+                class="bg-blue-600 transition hover:bg-blue-500 px-10 py-2 block rounded-md mx-auto mt-2 disabled:bg-blue-300"
+                id="scrape-btn"
+                disabled
+              >
                 <span>Start</span>
               </button>
             </div>
@@ -31,10 +38,19 @@
         </div>
       </div>
 
-      <div class="mt-10">
+      <div class="my-10">
         <div class="md:max-w-[1024px] w-11/12 mx-auto">
           <div class="text-center space-y-4">
             <h2 class="text-2xl font-semibold">Result</h2>
+            <div id="result-display">
+              <div class="w-28 h-28 mx-auto rounded-full hidden" id="loader"></div>
+              <textarea
+                id="result-text"
+                cols="30"
+                rows="10"
+                class="border-2 border-slate-200 w-11/12 p-5 mx-auto rounded-md focus:outline-none text-slate-600 hidden"
+              ></textarea>
+            </div>
           </div>
         </div>
       </div>
