@@ -22,28 +22,58 @@ app.get("/", async (req, res) => {
 });
 
 app.get("/scrape", async (req, res) => {
-  async function crawler(domain) {
-    const allLinks = new Set();
-    const links = new Set();
+  res.status(200).render("scrape");
+});
 
-    try {
-      // Initial request
-      const request = await axios.get(domain);
+app.get("/scrape/:protocol/:domain/go", async (req, res) => {
+  const { protocol, domain } = req.params;
+  const mainUrl = `${protocol}://${domain}`;
+
+  const allLinks = new Set();
+
+  try {
+    async function sendRequests(url) {
+      const request = await axios.get(url);
       const htmlBody = request.data;
 
-      const $ = cheerio.load(htmlBody);
-      $("a").each(function () {
-        const linkUrl = $(this).attr("href");
-        // console.log(linkUrl);
-      });
-    } catch (error) {
-      throw new Error(error.message);
+      return htmlBody;
     }
+
+    function cleanUrls(url) {
+      if (url.startsWith(`${protocol}://${domain}`)) {
+        allLinks.add(url);
+      } else if (url.startsWith("/") && !url.endsWith("/")) {
+        allLinks.add(`${protocol}://${domain}${url}`);
+      } else {
+        return;
+      }
+    }
+
+    // Initial request.........
+    const $ = cheerio.load(await sendRequests(mainUrl));
+    $("a").each(function () {
+      const linkUrl = $(this).attr("href");
+      cleanUrls(linkUrl);
+    });
+
+    let currentListIndex = 0;
+    let nextListIndex = 5;
+    // Consecutive requests
+    const convertedList = Array.from(allLinks).slice(currentListIndex, nextListIndex);
+    async function crawlOtherLinks(allLinks) {
+      for (const link of convertedList) {
+        const $ = cheerio.load(await sendRequests(link));
+        $("a").each(function () {
+          const linkUrl = $(this).attr("href");
+          cleanUrls(linkUrl);
+        });
+      }
+    }
+  } catch (error) {
+    throw new Error(error);
   }
 
-  await crawler("http://localhost:3000/");
-
-  res.status(200).render("scrape");
+  res.status(200).json(Array.from(allLinks));
 });
 
 app.use(function (req, res) {
