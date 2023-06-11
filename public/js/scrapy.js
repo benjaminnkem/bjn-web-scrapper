@@ -45,14 +45,41 @@ scrapeGoBtn.addEventListener("click", async function (e) {
     const response = await fetch(`/scrape/${protocolType}/${mainDomainName}/go`);
     const data = await response.json();
 
-    console.log(data);
+    const resultTextArea = document.getElementById("result-text");
+    const resultElements = document.querySelectorAll(".result-items");
+    resultElements.forEach((el) => el.classList.replace("hidden", "block"));
+
+    if (data.length < 1) {
+      resultTextArea.value = "No data available";
+    } else {
+      let xml = `
+    <?xml version="1.0" encoding="UTF-8"?>
+      <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`;
+      for (const link of data) {
+        xml += `\n<url>
+          <loc>${link}</loc>
+          <lastmod>${new Date().toISOString()}</lastmod>
+          <priority>1</priority>
+        </url>`;
+      }
+      xml += `\n</urlset>`;
+      resultTextArea.value = xml.trim();
+    }
   } catch (error) {
     loader.classList.add("hidden");
-    // throw new Error(error);
+    resultTextArea.value = "No data available";
     return;
   } finally {
     loader.classList.add("hidden");
   }
+});
 
-  loader.classList.add("hidden");
+const copyButton = document.getElementById("copy-button");
+copyButton.addEventListener("click", () => {
+  const copyText = document.querySelector("#copy-button span");
+  copyText.textContent = "Copied!";
+  setTimeout(() => {
+    copyText.textContent = "Copy";
+  }, 4000);
+  navigator.clipboard.writeText(document.getElementById("result-text").value);
 });

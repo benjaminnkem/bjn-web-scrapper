@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <%- include('includes/general_links') %> <%- include('includes/optional_links') %>
-    <link rel="stylesheet" href="/css/scrape.css">
+    <link rel="stylesheet" href="/css/scrape.css" />
     <script src="/js/scrapy.js" defer></script>
     <title>Get All Urls - BjnAPI</title>
   </head>
@@ -38,18 +38,23 @@
         </div>
       </div>
 
-      <div class="my-10">
+      <div class="mt-10 mb-20">
         <div class="md:max-w-[1024px] w-11/12 mx-auto">
           <div class="text-center space-y-4">
             <h2 class="text-2xl font-semibold">Result</h2>
+            <span class="text-sm text-slate-600">(It might take a while, based on amount of urls)</span>
             <div id="result-display">
-              <div class="w-28 h-28 mx-auto rounded-full hidden" id="loader"></div>
+              <div class="w-28 h-28 mx-auto rounded-full hidden my-5" id="loader"></div>
               <textarea
                 id="result-text"
-                cols="30"
-                rows="10"
-                class="border-2 border-slate-200 w-11/12 p-5 mx-auto rounded-md focus:outline-none text-slate-600 hidden"
+                class="border-2 border-slate-200 w-11/12 md:w-[30rem] p-5 mx-auto rounded-md focus:outline-none text-slate-800 text-sm h-[20rem] resize-none result-items hidden"
               ></textarea>
+              <button
+                class="py-2 px-6 mx-auto rounded-md shadow-md duration-200 hover:bg-blue-700 bg-blue-800 text-blue-50 result-items hidden my-3"
+                id="copy-button"
+              >
+                <span>Copy</span> <i class="ri-clipboard-line"></i>
+              </button>
             </div>
           </div>
         </div>

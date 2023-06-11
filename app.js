@@ -144,7 +144,13 @@ app.get("/scrape/:protocol/:domain/go", async (req, res) => {
     await crawlOtherLinks([...allLinks]);
 
     // Creating the XML document
-    const filePath = "./sitemap/sitemap.xml";
+
+    const directory = './sitemaps'
+    if (!fs.existsSync(directory)) {
+      fs.mkdirSync(directory);
+    }
+
+    const filePath = "./sitemaps/sitemap.xml";
     let xml = `<?xml version="1.0" encoding="UTF-8"?>
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`;
     for (const link of allLinks) {
@@ -161,8 +167,6 @@ app.get("/scrape/:protocol/:domain/go", async (req, res) => {
         console.log(err);
       }
     });
-
-    console.log(xml);
   } catch (error) {
     console.log(error);
   }
