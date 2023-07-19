@@ -54,7 +54,7 @@ router.get("/scrape/:protocol/:domain/go", async (req, res) => {
   }
 
   try {
-    // Initial request.........
+    // Initial request...
     const $ = cheerio.load(await sendRequests(mainUrl));
     $("a").each(function () {
       const linkUrl = $(this).attr("href");
@@ -65,38 +65,12 @@ router.get("/scrape/:protocol/:domain/go", async (req, res) => {
   }
 
   try {
-    // // Consecutive requests
-    // let currentListIndex = 0;
-    // let nextListIndex = 20;
-    // let convertedList = Array.from(allLinks).slice(currentListIndex, nextListIndex);
-
-    // async function crawlOtherLinks() {
-    //   if (nextListIndex <= Array.from(allLinks).length) {
-    //     for (let i = 0; i < nextListIndex; i += 5) {
-    //       for (const link of convertedList) {
-    //         currentListIndex += 5;
-    //         nextListIndex += 5;
-
-    //         convertedList = Array.from(allLinks).slice(currentListIndex, nextListIndex);
-    //         const $ = cheerio.load(await sendRequests(link));
-    //         $("a").each(function () {
-    //           const linkUrl = $(this).attr("href");
-    //           cleanUrls(linkUrl);
-    //         });
-    //       }
-    //     }
-    //   } else {
-    //     const remainingNumberOfLinks = Array.from(allLinks).length - nextListIndex;
-    //     currentListIndex += remainingNumberOfLinks;
-    //     nextListIndex += remainingNumberOfLinks;
-    //   }
-    // }
-
     async function crawlOtherLinks(links) {
       const gottenLinks = new Set();
-      // This just loops through the first links of the "allLinks" list
       async function repeatCrawling(links) {
         for (const link of links) {
+          if (visitedLinks.has(link)) return;
+
           const $ = cheerio.load(await sendRequests(link));
           $("a").each(function () {
             const linkUrl = $(this).attr("href");
@@ -111,7 +85,10 @@ router.get("/scrape/:protocol/:domain/go", async (req, res) => {
       // Initial crawl repeat results
       await repeatCrawling(links);
 
-      while (gottenLinks.size <= 5000) {
+      let timeLimit = 0;
+      while (timeLimit < 100 && gottenLinks.size <= 5000) {
+        timeLimit++;
+        console.log(timeLimit);
         // This just loops through consecutive links of the "gottenLinks" list
         await repeatCrawling([...gottenLinks]);
       }
@@ -126,7 +103,6 @@ router.get("/scrape/:protocol/:domain/go", async (req, res) => {
     await crawlOtherLinks([...allLinks]);
 
     // Creating the XML document
-
     const directory = "./sitemaps";
     if (!fs.existsSync(directory)) {
       fs.mkdirSync(directory);
@@ -155,6 +131,5 @@ router.get("/scrape/:protocol/:domain/go", async (req, res) => {
 
   res.status(200).json([...allLinks]);
 });
-
 
 module.exports = router;
